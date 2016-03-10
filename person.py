@@ -1,5 +1,5 @@
 from abc import ABCMeta,abstractmethod
-
+from constants import GlobalConstants
 
 class Person(object):
     __metaclass__ = ABCMeta
@@ -23,6 +23,12 @@ class Person(object):
 
     def print_message(self, message):
         print self.MESSAGE.format(self.name, self.verb, message)
+
+    def notify(self, type, notification_data):
+        if type==GlobalConstants.GOAL_KEYWORD:
+            self.notify_goal(notification_data)
+        elif type==GlobalConstants.GAME_OVER_KEYWORD:
+            self.notify_game_over(notification_data)
 
     def notify_goal(self, team):
         self.print_goal_message(team)

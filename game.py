@@ -2,6 +2,7 @@ from supporter import Supporter
 from reporter import Reporter
 from team import Team
 from custom_exceptions import TeamNotFound
+from constants import GlobalConstants
 
 
 class Game(object):
@@ -43,20 +44,19 @@ class Game(object):
     def get_subscribers(self):
         return self.supporters + self.reporters
 
-    def notify_subscribers(self, notification_function, data_object):
+    def notify_subscribers(self, notification_type, notification_data):
         subscribers = self.get_subscribers()
         for subscriber in subscribers:
-            function_name = getattr(subscriber, notification_function)
-            function_name(data_object)
+            subscriber.notify(notification_type, notification_data)
 
     def goal(self, team_name):
         team = self.get_team_by_name(team_name)
         team.increase_goal_count()
-        self.notify_subscribers('notify_goal', team)
+        self.notify_subscribers(GlobalConstants.GOAL_KEYWORD, team)
 
     def complete(self):
         self.set_winner_and_loser()
-        self.notify_subscribers('notify_game_over', self)
+        self.notify_subscribers(GlobalConstants.GAME_OVER_KEYWORD, self)
 
     def is_match_tie(self):
         return self.team1.goal_count == self.team2.goal_count
