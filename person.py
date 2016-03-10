@@ -24,10 +24,10 @@ class Person(object):
     def print_message(self, message):
         print self.MESSAGE.format(self.name, self.verb, message)
 
-    def notify(self, type, notification_data):
-        if type==GlobalConstants.GOAL_KEYWORD:
+    def notify(self, notification_type, notification_data):
+        if notification_type == GlobalConstants.GOAL_KEYWORD:
             self.notify_goal(notification_data)
-        elif type==GlobalConstants.GAME_OVER_KEYWORD:
+        elif notification_type == GlobalConstants.GAME_OVER_KEYWORD:
             self.notify_game_over(notification_data)
 
     def notify_goal(self, team):
