@@ -18,27 +18,27 @@ class Supporter(Person):
     def __init__(self, name, team):
         super(Supporter, self).__init__(name)
         self.team = team
-        self.verb = GlobalConstants.SUPPORTER_TITLE_MESSAGE_VERB
+        self.verb = self.SUPPORTER_TITLE_MESSAGE_VERB
 
     def print_message(self, message):
         super(Supporter, self).print_message(message)
 
     def get_goal_message_based_on_team(self, team_secured_current_goal):
-        return GlobalConstants.SUPPORTER_EXPRESSION_ON_HIS_TEAM_GOAL \
-            if team_secured_current_goal == self.team else GlobalConstants.SUPPORTER_EXPRESSION_ON_OPPOSITE_TEAM_GOAL
+        return self.SUPPORTER_EXPRESSION_ON_HIS_TEAM_GOAL \
+            if team_secured_current_goal == self.team else self.SUPPORTER_EXPRESSION_ON_OPPOSITE_TEAM_GOAL
 
     def print_goal_message(self, team_secured_current_goal):
         goal_message = self.get_goal_message_based_on_team(team_secured_current_goal)
         self.print_message(goal_message)
 
     def get_game_over_message_based_on_team(self, winning_team):
-        message_format = GlobalConstants.SUPPORTER_EXPRESSION_ON_HIS_TEAM_WIN \
-            if winning_team == self.team else GlobalConstants.SUPPORTER_EXPRESSION_ON_HIS_TEAM_LOSE
+        message_format = self.SUPPORTER_EXPRESSION_ON_HIS_TEAM_WIN \
+            if winning_team == self.team else self.SUPPORTER_EXPRESSION_ON_HIS_TEAM_LOSE
         return message_format.format(self.team.name)
 
-    def print_game_over_message(self, winning_team):
-        if winning_team is None:
+    def print_game_over_message(self, game):
+        if game.is_match_tie():
             game_over_message = self.SUPPORTER_EXPRESSION_ON_DRAW_MATCH
         else:
-            game_over_message = self.get_game_over_message_based_on_team(winning_team)
+            game_over_message = self.get_game_over_message_based_on_team(game.winner)
         self.print_message(game_over_message)

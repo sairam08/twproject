@@ -18,7 +18,6 @@ class Reporter(Person):
 
     REPORTER_MESSAGE_ON_GAME_DRAW = 'The match concluded as a tie.'
 
-
     def __init__(self, name, news_channel_name):
         super(Reporter, self).__init__(name)
         self.news_channel = news_channel_name
@@ -42,9 +41,9 @@ class Reporter(Person):
         return Reporter.REPORTER_MESSAGE_ON_GAME_OVER.format(won_team.name, lost_team.name,
                                                              won_team.goal_count, lost_team.goal_count)
 
-    def print_game_over_message(self, won_team, lost_team):
-        if won_team is None:
+    def print_game_over_message(self, game):
+        if game.is_match_tie():
             game_over_message = self.REPORTER_MESSAGE_ON_GAME_DRAW
         else:
-            game_over_message = Reporter.get_game_over_message(won_team, lost_team)
+            game_over_message = Reporter.get_game_over_message(game.winner, game.loser)
         self.print_message(game_over_message)

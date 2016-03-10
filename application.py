@@ -1,103 +1,112 @@
 # -*- coding: utf-8 -*-
 
 from game import Game
-from team import Team
 from constants import GlobalConstants
+from custom_exceptions import TeamNotFound, InvalidFormat
 
 
 def custom_strip(string):
     return string.strip()
 
 
-def read_team_names_and_create_teams(game):
+def custom_int(string):
+    integer_value = int(string)
+    if integer_value < 0:
+        raise ValueError
+    return integer_value
+
+
+def read_inputs_and_split_values(expected_sample_pattern, function=custom_strip, split_char=None):
+    values = map(function, raw_input().split(split_char))
+    if len(expected_sample_pattern.split(split_char)) != len(values):
+        raise InvalidFormat(expected_sample_pattern)
+    return values
+
+
+def read_team_names():
     try:
-        team_name1, team_name2 = map(custom_strip, raw_input().split())
-        game.team1 = Team(team_name1)
-        game.team2 = Team(team_name2)
-        return [team_name1, team_name2]
-    except:
-        return 0
+        return read_inputs_and_split_values('India Brazil')
+    except InvalidFormat as ex:
+        print ex.message
 
 
-def read_supporter(game, team_names):
+def read_supporter():
     try:
-        supporter_name, supporter_team = map(custom_strip, raw_input().split(','))
-        if supporter_team not in team_names:
-            print "team name does not exist choose one among these ", ",".join(team_names)
-            return 0
-        game.create_supporters(supporter_name, supporter_team)
-        return 1
-    except:
-        print "malformed input : sample valid input is as follows 'Ravi, India' , please input in correct format"
-        return 0
+        return read_inputs_and_split_values('Ravi, India', split_char=',')
+    except InvalidFormat as ex:
+        print ex.message
 
 
-
-def read_reporter(game):
+def read_reporter():
     try:
-        reporter_name, reporter_channel = map(custom_strip, raw_input().split(','))
-        game.create_reporters(reporter_name, reporter_channel)
-        return 1
-    except:
-        return 0
+        return read_inputs_and_split_values('Vijay, CNN news', split_char=',')
+    except InvalidFormat as ex:
+        print ex.message
 
 
 def read_supporter_and_reporter_count():
     try:
-        supporter_count, reporter_count = map(int, raw_input().split(' '))
-        return supporter_count, reporter_count
-    except:
-        return None, None
+        return read_inputs_and_split_values('1 2', function=custom_int)
+    except InvalidFormat as ex:
+        print ex.message
+    except ValueError as ex:
+        print "A positive integer expected"
 
 
-def create_goal(game, team_name, team_names):
+def get_team_name_from_message(message):
+    return message.split(GlobalConstants.GOAL_KEYWORD)[1].strip()
 
-    if isinstance(team_name, list):
-        team_name = team_name[1]
 
-    team_name = team_name.strip()
+def create_goal(game, team_name):
+    try:
+        team = game.goal(team_name)
+        for person in game.supporters + game.reporters:
+            person.print_goal_message(team)
+    except TeamNotFound as ex:
+        print ex.message
 
-    if team_name in team_names:
-        game.goal(team_name)
-    else:
-        print "team name does not exist choose one among these ", ",".join(team_names)
 
+def complete(game):
+    game.complete()
+    for person in game.supporters + game.reporters:
+        person.print_game_over_message(game)
 
 if __name__ == '__main__':
 
-    current_game = Game()
-    team_names = []
-    supporter_count, reporter_count = 0, 0
+    team_names = None
 
-    while 1:
-        team_names = read_team_names_and_create_teams(current_game)
-        if team_names:
-            break
-        print "malformed input : sample valid input is as follows 'India Brazil' , please input in correct format"
+    while team_names is None:
+        team_names = read_team_names()
 
-    while 1:
-        supporter_count, reporter_count = read_supporter_and_reporter_count()
-        if supporter_count:
-            break
-        print "malformed input : sample valid input is as follows '2 1' , please input in correct format"
+    game = Game(team_names)
 
-    for i in range(supporter_count):
-        if not read_supporter(current_game, team_names):
-            read_supporter(current_game, team_names)
+    counts = None
+    while counts is None:
+        counts = read_supporter_and_reporter_count()
 
-    for i in range(reporter_count):
-        if not read_reporter(current_game):
-            print "malformed input : sample valid input is as follows 'Vijay, CNN news', please input in correct format"
-            read_reporter(current_game)
+    supporters_count = counts[0]
+    reporters_count = counts[1]
+
+    while len(game.supporters) < supporters_count:
+        supporter_name, supporter_team = read_supporter()
+        try:
+            game.create_supporter(supporter_name, supporter_team)
+        except TeamNotFound as ex:
+            print ex.message
+
+    while len(game.reporters) < reporters_count:
+        reporter_name, reporter_channel = read_reporter()
+        game.create_reporter(reporter_name, reporter_channel)
 
     while 1:
         input_message = raw_input()
         if GlobalConstants.GAME_OVER_KEYWORD in input_message:
-            current_game.complete()
+            complete(game)
             exit(0)
 
         elif GlobalConstants.GOAL_KEYWORD in input_message:
-            create_goal(current_game, input_message.split(GlobalConstants.GOAL_KEYWORD), team_names)
+            team_name = get_team_name_from_message(input_message)
+            create_goal(game, team_name)
         else:
-            print "invalid input should be either one of this {0} or {1} <team_name>".\
+            print "invalid input should be either one of this {0} or {1}: <team_name>".\
                 format(GlobalConstants.GAME_OVER_KEYWORD, GlobalConstants.GOAL_KEYWORD)
