@@ -23,3 +23,9 @@ class Person(object):
 
     def print_message(self, message):
         print self.MESSAGE.format(self.name, self.verb, message)
+
+    def notify_goal(self, team):
+        self.print_goal_message(team)
+
+    def notify_game_over(self, game):
+        self.print_game_over_message(game)

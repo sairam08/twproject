@@ -40,13 +40,23 @@ class Game(object):
         reporter = Reporter(reporter_name, news_channel)
         self.reporters.append(reporter)
 
+    def get_subscribers(self):
+        return self.supporters + self.reporters
+
+    def notify_subscribers(self, notification_function, data_object):
+        subscribers = self.get_subscribers()
+        for subscriber in subscribers:
+            function_name = getattr(subscriber, notification_function)
+            function_name(data_object)
+
     def goal(self, team_name):
         team = self.get_team_by_name(team_name)
         team.increase_goal_count()
-        return team
+        self.notify_subscribers('notify_goal', team)
 
     def complete(self):
         self.set_winner_and_loser()
+        self.notify_subscribers('notify_game_over', self)
 
     def is_match_tie(self):
         return self.team1.goal_count == self.team2.goal_count
