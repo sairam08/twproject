@@ -1,6 +1,4 @@
-from constants import GlobalConstants
 from person import Person
-from team import Team
 
 
 class Supporter(Person):

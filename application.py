@@ -8,14 +8,14 @@ from helper import custom_int, process_input
 
 class Application(object):
     """
-    Reads, Parses all inputs and notifies the Game about the events and its respective details 
+    Reads, Parses all inputs and notifies the Game about the events and its respective details
     """
 
     def __init__(self):
         self.game = None
-        
+
     @staticmethod
-    def read_game_input(): 
+    def read_game_input():
         # can be modified as needed in case input method changes at a later point
         return raw_input()
 
@@ -46,7 +46,7 @@ class Application(object):
     @staticmethod
     def read_reporter():
         """
-        Reads input from console, parses the reporter details and returns the reporter name, reporter's channel 
+        Reads input from console, parses the reporter details and returns the reporter name, reporter's channel
         :return: list of strings containing reporter name, reporter channel
         """
         try:
@@ -95,7 +95,7 @@ class Application(object):
 
         team_names = None
         counts = None
-        
+
         # loop iterates till the correct inputs are provided
         while team_names is None:
             team_names = self.read_team_names()
@@ -105,18 +105,17 @@ class Application(object):
         # loop iterates till all valid counts are provided
         while counts is None:
             counts = self.read_supporter_and_reporter_count()
-        
-        # input is expected to contain supporter count as first and reporter count as second 
+
+        # input is expected to contain supporter count as first and reporter count as second
         supporters_count = counts[0]
         reporters_count = counts[1]
-        
+
         # loop iterates till all the supporters details are provided correctly
         while supporters_count:
             supporter_name, supporter_team = self.read_supporter()
             supporter = self.create_supporter(supporter_name, supporter_team)
             if supporter:
                 supporters_count -= 1
-
 
         # loop iterates till all the reporters details are provided correctly
         while reporters_count:
@@ -130,12 +129,12 @@ class Application(object):
         # loop iterates till game ends and will process only inputs that has either 'goal' or 'game over' related keys
         while 1:
             input_message = Application.read_game_input()
-            
+
             # will trigger game complete and ends the application
             if GlobalConstants.GAME_OVER_KEYWORD in input_message:
                 self.game.complete()
                 exit(0)
-            
+
             # if Goal input is passed its processed and notified to game
             elif GlobalConstants.GOAL_KEYWORD in input_message:
                 team_name = Application.get_team_name_from_message(input_message)
@@ -149,9 +148,9 @@ if __name__ == '__main__':
 
     # creating new app
     app = Application()
-    
+
     # initializing the needed values
     app.initialize_game()
-    
+
     # app starts processing goals till game is over
     app.run()

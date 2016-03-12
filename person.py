@@ -1,4 +1,4 @@
-from abc import ABCMeta,abstractmethod
+from abc import ABCMeta, abstractmethod
 from constants import GlobalConstants
 
 

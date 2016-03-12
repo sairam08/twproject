@@ -69,6 +69,3 @@ class Game(object):
                 self._winner, self._loser = self.team1, self.team2
             else:
                 self._winner, self._loser = self.team2, self.team1
-
-
-

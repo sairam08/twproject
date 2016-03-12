@@ -1,4 +1,3 @@
-from constants import GlobalConstants
 from person import Person
 import time
 
