@@ -9,3 +9,8 @@ class InvalidFormat(Exception):
     def __init__(self, expected_format):
         self.message = "malformed input : sample valid input is as follows '{0}' , please input in correct format".\
             format(expected_format)
+
+
+class InvalidNumber(ValueError):
+    def __init__(self):
+        self.message = "Invalid input provided, expecting two positive integers"

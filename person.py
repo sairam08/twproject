@@ -1,6 +1,7 @@
 from abc import ABCMeta,abstractmethod
 from constants import GlobalConstants
 
+
 class Person(object):
     __metaclass__ = ABCMeta
 
