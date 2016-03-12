@@ -1,4 +1,4 @@
-
+import re
 from custom_exceptions import InvalidFormat, InvalidNumber
 
 
@@ -37,6 +37,11 @@ def process_input(input_message, expected_sample_pattern, function=custom_strip,
     :return:
     """
     values = map(function, input_message.split(split_char))
-    if len(expected_sample_pattern.split(split_char)) != len(values):
+    if len(expected_sample_pattern.split(split_char)) != len(values) or None in values or '' in values:
         raise InvalidFormat(expected_sample_pattern)
     return values
+
+
+def name_validator(input_string):
+    pattern = re.compile('([A-Z]|[a-z]|[\.]|[\s])+')
+    return True if pattern.match(input_string) else False

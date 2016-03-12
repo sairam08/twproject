@@ -1,8 +1,11 @@
 
 class TeamNotFound(Exception):
     def __init__(self, given_team_name, available_teams):
-        self.message = "Given team - '{0}' does not exist, please choose among these teams {1}".\
-            format(given_team_name, ",".join(available_teams))
+        if given_team_name:
+            message = "Given team - '{0}' does not exist, ".format(given_team_name)
+        else:
+            message = "Team name is not provided"
+        self.message = "{0} please choose among these teams {1}".format(message, ",".join(available_teams))
 
 
 class InvalidFormat(Exception):

@@ -36,10 +36,12 @@ class Game(object):
         supporting_team = self.get_team_by_name(supporting_team_name)
         supporter = Supporter(supporter_name, supporting_team)
         self.supporters.append(supporter)
+        return supporter
 
     def create_reporter(self, reporter_name, news_channel):
         reporter = Reporter(reporter_name, news_channel)
         self.reporters.append(reporter)
+        return reporter
 
     def get_subscribers(self):
         return self.supporters + self.reporters

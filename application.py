@@ -34,17 +34,33 @@ class Application(object):
             return process_input(input_message, 'Ravi, India', split_char=',')
         except InvalidFormat as ex:
             print ex.message
+            return None, None
+
+    def create_supporter(self, supporter_name, supporter_team):
+        try:
+            if supporter_name and supporter_name:
+                return self.game.create_supporter(supporter_name, supporter_team)
+        except TeamNotFound as ex:
+            print ex.message
 
     @staticmethod
     def read_reporter():
         """
         Reads input from console, parses the reporter details and returns the reporter name, reporter's channel 
-        :return:  
+        :return: list of strings containing reporter name, reporter channel
         """
         try:
             input_message = Application.read_game_input()
             return process_input(input_message, 'Vijay, CNN news', split_char=',')
         except InvalidFormat as ex:
+            print ex.message
+            return None, None
+
+    def create_reporter(self, reporter_name, reporter_channel):
+        try:
+            if reporter_name and reporter_channel:
+                return self.game.create_reporter(reporter_name, reporter_channel)
+        except TeamNotFound as ex:
             print ex.message
 
     @staticmethod
@@ -97,17 +113,17 @@ class Application(object):
         # loop iterates till all the supporters details are provided correctly
         while supporters_count:
             supporter_name, supporter_team = self.read_supporter()
-            try:
-                self.game.create_supporter(supporter_name, supporter_team)
+            supporter = self.create_supporter(supporter_name, supporter_team)
+            if supporter:
                 supporters_count -= 1
-            except TeamNotFound as ex:
-                print ex.message
+
 
         # loop iterates till all the reporters details are provided correctly
         while reporters_count:
             reporter_name, reporter_channel = self.read_reporter()
-            reporters_count -= 1
-            self.game.create_reporter(reporter_name, reporter_channel)
+            reporter = self.create_reporter(reporter_name, reporter_channel)
+            if reporter:
+                reporters_count -= 1
 
     def run(self):
 
