@@ -24,6 +24,11 @@ class Game(object):
         return self._loser
 
     def get_team_by_name(self, team_name):
+        """
+        returns Team in the game is the team  exists else raises TeamNotFound exception
+        :param team_name:string
+        :return:
+        """
         if self.team1 and self.team2:
             if team_name == self.team1.name:
                 return self.team1
@@ -33,20 +38,41 @@ class Game(object):
                 raise TeamNotFound(team_name, [self.team1.name, self.team2.name])
 
     def create_supporter(self, supporter_name, supporting_team_name):
+        """
+        creates a supporter and adds to the Game supporters List
+        :param supporter_name: string
+        :param supporting_team_name: string
+        :return: Supporter object
+        """
         supporting_team = self.get_team_by_name(supporting_team_name)
         supporter = Supporter(supporter_name, supporting_team)
         self.supporters.append(supporter)
         return supporter
 
     def create_reporter(self, reporter_name, news_channel):
+        """
+        creates a reporter and adds to the Game's reporters list
+        :param reporter_name: string
+        :param news_channel: string
+        :return:
+        """
         reporter = Reporter(reporter_name, news_channel)
         self.reporters.append(reporter)
         return reporter
 
     def get_subscribers(self):
+        """
+        :return:list (containing the subscribers to the Game)
+        """
         return self.supporters + self.reporters
 
     def notify_subscribers(self, notification_type, notification_data):
+        """
+        notifies the subscriber about the notification type and its data
+        :param notification_type: string
+        :param notification_data: Object based on the notification type
+        :return:
+        """
         subscribers = self.get_subscribers()
         for subscriber in subscribers:
             subscriber.notify(notification_type, notification_data)
@@ -57,6 +83,7 @@ class Game(object):
         self.notify_subscribers(GlobalConstants.GOAL_KEYWORD, team)
 
     def complete(self):
+        # finishes the game , sets the winners and losers and notifies the subscribers about game completion
         self.set_winner_and_loser()
         self.notify_subscribers(GlobalConstants.GAME_OVER_KEYWORD, self)
 

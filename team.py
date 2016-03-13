@@ -9,4 +9,5 @@ class Team(object):
 
     @property
     def goal_count(self):
+        # property of team , acts as a getter and setter for _goal_count
         return self._goal_count

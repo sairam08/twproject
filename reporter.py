@@ -32,6 +32,11 @@ class Reporter(Person):
                                                         time.strftime('%I:%M %p').lower())
 
     def print_goal_message(self, team_secured_current_goal):
+        """
+        prints the message on a team making a goal
+        :param team_secured_current_goal: Team to which current goal corresponds to
+        :return: None
+        """
         goal_message = Reporter.get_goal_message(team_secured_current_goal)
         self.print_message(goal_message)
 
@@ -41,6 +46,11 @@ class Reporter(Person):
                                                              won_team.goal_count, lost_team.goal_count)
 
     def print_game_over_message(self, game):
+        """
+        prints the Game complete message
+        :param game: Game object
+        :return:None
+        """
         if game.is_match_tie():
             game_over_message = self.REPORTER_MESSAGE_ON_GAME_DRAW
         else:

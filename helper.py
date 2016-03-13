@@ -43,5 +43,10 @@ def process_input(input_message, expected_sample_pattern, function=custom_strip,
 
 
 def name_validator(input_string):
+    """
+    validates if the string only contains alphabets or '.' or a space
+    :param input_string: string which can be person name or country name in our case
+    :return:
+    """
     pattern = re.compile('([A-Z]|[a-z]|[\.]|[\s])+')
     return True if pattern.match(input_string) else False

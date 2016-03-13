@@ -26,6 +26,11 @@ class Supporter(Person):
             if team_secured_current_goal == self.team else self.SUPPORTER_EXPRESSION_ON_OPPOSITE_TEAM_GOAL
 
     def print_goal_message(self, team_secured_current_goal):
+        """
+        prints the message on a team making a goal
+        :param team_secured_current_goal: Team to which current goal corresponds to
+        :return: None
+        """
         goal_message = self.get_goal_message_based_on_team(team_secured_current_goal)
         self.print_message(goal_message)
 
@@ -35,6 +40,11 @@ class Supporter(Person):
         return message_format.format(self.team.name)
 
     def print_game_over_message(self, game):
+        """
+        prints the Game complete message
+        :param game: Game object
+        :return:None
+        """
         if game.is_match_tie():
             game_over_message = self.SUPPORTER_EXPRESSION_ON_DRAW_MATCH
         else:
